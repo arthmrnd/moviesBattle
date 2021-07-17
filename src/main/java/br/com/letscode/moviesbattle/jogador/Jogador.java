@@ -1,4 +1,4 @@
-package br.com.letscode.moviesbattle.domain;
+package br.com.letscode.moviesbattle.jogador;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

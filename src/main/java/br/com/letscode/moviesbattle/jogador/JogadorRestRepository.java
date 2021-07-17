@@ -1,4 +1,4 @@
-package br.com.letscode.moviesbattle.domain;
+package br.com.letscode.moviesbattle.jogador;
 
 import com.opencsv.CSVReader;
 
@@ -10,10 +10,10 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JogadoresList {
+public class JogadorRestRepository {
     List<Jogador> jogadoresList;
 
-    public JogadoresList() throws IOException {
+    public JogadorRestRepository() throws IOException {
         jogadoresList = new ArrayList<>();
         CSVReader reader = new CSVReader(new FileReader("jogadores.csv"));
         String[] line;

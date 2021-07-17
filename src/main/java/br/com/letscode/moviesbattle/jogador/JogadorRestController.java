@@ -1,7 +1,5 @@
-package br.com.letscode.moviesbattle.controller;
+package br.com.letscode.moviesbattle.jogador;
 
-import br.com.letscode.moviesbattle.domain.Jogador;
-import br.com.letscode.moviesbattle.domain.JogadoresList;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,12 +10,12 @@ import java.security.NoSuchAlgorithmException;
 
 @RequestMapping("/login")
 @RestController
-public class JogadorLoginRestController {
+public class JogadorRestController {
 
     @GetMapping
     public String login(@RequestBody Jogador jogador) throws NoSuchAlgorithmException, IOException {
-        JogadoresList jogadoresList = new JogadoresList();
-        if(jogadoresList.compareJogador(jogador.getUser(), jogador.getPassword())){
+        JogadorRestRepository jogadorRestRepository = new JogadorRestRepository();
+        if(jogadorRestRepository.compareJogador(jogador.getUser(), jogador.getPassword())){
             return "Login bem sucedido";
         }
         else {
