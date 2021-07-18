@@ -37,8 +37,8 @@ public class MovieRestRepository {
         }
     }
 
-    public void inserirArquivo(MovieDetail movieDetail) throws IOException {
-        write(format(movieDetail), StandardOpenOption.APPEND);
+    public void inserirArquivo(Movie movie) throws IOException {
+        write(format(movie), StandardOpenOption.APPEND);
     }
 
     private void write(String clienteStr, StandardOpenOption option) throws IOException {
@@ -57,12 +57,12 @@ public class MovieRestRepository {
         return movies;
     }
 
-    private String format(MovieDetail movieDetail) {
+    private String format(Movie movie) {
         return String.format("%s,%s,%s,%f\r\n",
-                movieDetail.getTitle(),
-                movieDetail.getYear(),
-                movieDetail.getImdbId(),
-                movieDetail.getRating());
+                movie.getTitle(),
+                movie.getYear(),
+                movie.getImdbId(),
+                movie.getRating());
     }
 
     private Movie convert(String linha) {

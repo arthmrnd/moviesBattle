@@ -1,5 +1,6 @@
 package br.com.letscode.moviesbattle.movie;
 
+import br.com.letscode.moviesbattle.client.MovieDetailRestRepository;
 import br.com.letscode.moviesbattle.client.MovieMinimalRestRepository;
 import br.com.letscode.moviesbattle.client.ResultSearch;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +10,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -17,46 +17,38 @@ import java.util.stream.Collectors;
 public class MovieService {
 
     private final MovieRestRepository movieRepository;
-    private final MovieMinimalRestRepository restRepository;
+    private final MovieMinimalRestRepository minimalRestRepository;
+    private final MovieDetailRestRepository detailRestRepository;
 
     public List<Movie> listarTodos() throws IOException {
         return movieRepository.listAll();
     }
 
-    private Movie filmeAleatorio() throws IOException  {
-        var movies = listarTodos();
-        var random = new Random();
-        return movies.get(random.nextInt(movies.size()));
-    }
-
-    public List<Movie> escolherFilme() throws IOException {
-        List<Movie> list = new ArrayList<>();
-        var primeiroFilme = filmeAleatorio();
-        list.add(primeiroFilme);
-        Movie segundoFilme;
-        do {
-            segundoFilme = filmeAleatorio();
-        } while (primeiroFilme.equals(segundoFilme));
-        list.add(segundoFilme);
-        return list;
-    }
-
-    public ResultSearch queryMultipleMovies(List<String> name) throws IOException {
+    public List<Movie> salvarFilmes(List<String> name) throws IOException {
         List<ResultSearch> resultList = name.stream()
-                .map(this.restRepository::search)
+                .map(this.minimalRestRepository::search)
                 .collect(Collectors.toList());
-        for(int i = 0; i < resultList.size(); i++) {
-            movieRepository.inserirArquivo(resultList.get(i).getResultList().get(i));
+        ResultSearch reduce = reduce(resultList);
+        List<Movie> movieList = new ArrayList<>();
+        for(int i = 0; i < reduce.getResultList().size(); i++) {
+            var movie = Movie.builder()
+                    .title(reduce.getResultList().get(i).getTitle())
+                    .year(reduce.getResultList().get(i).getYear())
+                    .imdbId(reduce.getResultList().get(i).getImdbId())
+                    .rating(detailRestRepository.detail(reduce.getResultList().get(i).getImdbId()).getRating())
+                    .build();
+            movieRepository.inserirArquivo(movie);
+            movieList.add(movie);
         }
-        return reduce(resultList);
+        return movieList;
     }
 
     private ResultSearch reduce(List<ResultSearch> resultList) {
-        ResultSearch result = new ResultSearch();
-        result.setResultList(resultList.stream().map(ResultSearch::getResultList).flatMap(Collection::stream).collect(
-                Collectors.toList()));
-        result.setResponse(resultList.stream().map(ResultSearch::getResponse).reduce(true, Boolean::logicalAnd));
-        result.setTotal(resultList.stream().map(ResultSearch::getTotal).reduce(0, Integer::sum));
-        return result;
+        return ResultSearch.builder()
+                .resultList(resultList.stream().map(ResultSearch::getResultList).flatMap(Collection::stream).collect(
+                        Collectors.toList()))
+                .response(resultList.stream().map(ResultSearch::getResponse).reduce(true, Boolean::logicalAnd))
+                .total(resultList.stream().map(ResultSearch::getTotal).reduce(0, Integer::sum))
+                .build();
     }
 }
