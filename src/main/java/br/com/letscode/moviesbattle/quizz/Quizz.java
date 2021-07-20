@@ -2,10 +2,8 @@ package br.com.letscode.moviesbattle.quizz;
 
 import br.com.letscode.moviesbattle.jogador.Jogador;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 @NoArgsConstructor
