@@ -3,6 +3,7 @@ package br.com.letscode.moviesbattle.movie;
 import br.com.letscode.moviesbattle.client.MovieDetailRestRepository;
 import br.com.letscode.moviesbattle.client.MovieMinimalRestRepository;
 import br.com.letscode.moviesbattle.client.ResultSearch;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +14,12 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+@Data
 @Service
 @RequiredArgsConstructor
-public class MovieService {
+public class MovieRestService {
+
+    private final List<Movie> duplaFilmes = new ArrayList<>();
 
     private final MovieRestRepository movieRepository;
     private final MovieMinimalRestRepository minimalRestRepository;
@@ -32,15 +36,14 @@ public class MovieService {
     }
 
     public List<Movie> escolherFilme() throws IOException {
-        List<Movie> list = new ArrayList<>();
         var primeiroFilme = filmeAleatorio();
-        list.add(primeiroFilme);
+        duplaFilmes.add(primeiroFilme);
         Movie segundoFilme;
         do {
             segundoFilme = filmeAleatorio();
         } while (primeiroFilme.equals(segundoFilme));
-        list.add(segundoFilme);
-        return list;
+        duplaFilmes.add(segundoFilme);
+        return duplaFilmes;
     }
 
     public List<Movie> salvarFilmes(List<String> name) throws IOException {

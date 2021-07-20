@@ -2,7 +2,7 @@ package br.com.letscode.moviesbattle.quizz;
 
 import br.com.letscode.moviesbattle.jogador.JogadorRestService;
 import br.com.letscode.moviesbattle.movie.Movie;
-import br.com.letscode.moviesbattle.movie.MovieService;
+import br.com.letscode.moviesbattle.movie.MovieRestService;
 import br.com.letscode.moviesbattle.quizz.jogadorquizz.JogadorQuizz;
 import br.com.letscode.moviesbattle.quizz.jogadorquizz.JogadorQuizzRepository;
 import br.com.letscode.moviesbattle.ranking.RankingRestRepository;
@@ -19,14 +19,14 @@ public class QuizzRestService {
 
     private List<Movie> movieList;
 
-    private final MovieService movieService;
+    private final MovieRestService movieRestService;
     private final JogadorRestService jogadorRestService;
     private final JogadorQuizzRepository jogadorQuizzRepository;
     private final QuizzRestRepository quizzRestRepository;
     private final RankingRestRepository rankingRestRepository;
 
     public List<Movie> listMovies() throws IOException {
-        movieList = movieService.escolherFilme();
+        movieList = movieRestService.escolherFilme();
         return movieList;
     }
 
