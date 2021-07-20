@@ -17,6 +17,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class MovieRestControllerTest {
 
     @Autowired
+    private MovieRestService movieRestService;
+
+    @Autowired
     private MockMvc mockMvc;
 
     @Test
@@ -33,5 +36,34 @@ public class MovieRestControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Blade")));
+    }
+
+    @Test
+    void filmesParaQuizzTesteParametroErrado() throws Exception {
+        this.mockMvc.perform(get("/movies?nome=Blade"))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+
+    @Test
+    void filmesParaQuizzTesteParametroInexistente() throws Exception {
+        this.mockMvc.perform(get("/movies?name=nomenaoexiste1234"))
+                .andDo(print())
+                .andExpect(status().isInternalServerError());
+    }
+    @Test
+    void filmesParaQuizzTesteNomeVazio() throws Exception {
+        this.mockMvc.perform(get("/movies?name="))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString(String.valueOf(movieRestService.getMovieList()))));
+    }
+
+    @Test
+    void filmesParaQuizzTesteSemParametro() throws Exception {
+        this.mockMvc.perform(get("/movies"))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
     }
 }

@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 public class MovieRestService {
 
     private List<Movie> duplaFilmes;
+    private List<Movie> movieList;
 
     private final MovieRestRepository movieRepository;
     private final MovieMinimalRestRepository minimalRestRepository;
@@ -52,7 +53,7 @@ public class MovieRestService {
                 .map(this.minimalRestRepository::search)
                 .collect(Collectors.toList());
         ResultSearch reduce = reduce(resultList);
-        List<Movie> movieList = new ArrayList<>();
+        movieList = new ArrayList<>();
         for(int i = 0; i < reduce.getResultList().size(); i++) {
             var movie = Movie.builder()
                     .title(reduce.getResultList().get(i).getTitle())
