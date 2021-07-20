@@ -82,7 +82,7 @@ public class QuizzRestService {
         if (moviesRatingList.get(0).getImdbId().equals(imdbId)) {
             return moviesRatingList.get(0).getRating() >= moviesRatingList.get(1).getRating();
         } else if (moviesRatingList.get(1).getImdbId().equals(imdbId)) {
-            return moviesRatingList.get(1).getImdbId().equals(imdbId);
+            return moviesRatingList.get(1).getRating() >= moviesRatingList.get(0).getRating();
         }
         return false;
     }
