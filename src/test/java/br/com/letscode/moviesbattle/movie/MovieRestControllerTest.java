@@ -1,6 +1,7 @@
 package br.com.letscode.moviesbattle.movie;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.internal.matchers.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -46,12 +47,6 @@ public class MovieRestControllerTest {
     }
 
 
-    @Test
-    void filmesParaQuizzTesteParametroInexistente() throws Exception {
-        this.mockMvc.perform(get("/movies?name=nomenaoexiste1234"))
-                .andDo(print())
-                .andExpect(status().isInternalServerError());
-    }
     @Test
     void filmesParaQuizzTesteNomeVazio() throws Exception {
         this.mockMvc.perform(get("/movies?name="))
