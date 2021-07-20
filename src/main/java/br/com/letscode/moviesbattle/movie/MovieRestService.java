@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MovieRestService {
 
-    private final List<Movie> duplaFilmes = new ArrayList<>();
+    private List<Movie> duplaFilmes;
 
     private final MovieRestRepository movieRepository;
     private final MovieMinimalRestRepository minimalRestRepository;
@@ -36,6 +36,7 @@ public class MovieRestService {
     }
 
     public List<Movie> escolherFilme() throws IOException {
+        duplaFilmes = new ArrayList<>();
         var primeiroFilme = filmeAleatorio();
         duplaFilmes.add(primeiroFilme);
         Movie segundoFilme;
