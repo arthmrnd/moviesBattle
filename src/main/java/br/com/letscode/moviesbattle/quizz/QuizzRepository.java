@@ -2,7 +2,10 @@ package br.com.letscode.moviesbattle.quizz;
 
 import org.springframework.stereotype.Repository;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,6 +20,16 @@ public class QuizzRepository {
     public void gravarPontuacao(Quizz quizz) throws IOException {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(path, true))){
             bw.write(quizz.toString());
+        }
+    }
+
+    public void listaScore()throws IOException{
+        try (BufferedReader br = new BufferedReader(new FileReader(path))){
+           String line = br.readLine();
+           while (line != null){
+               System.out.println(line);
+               line = br.readLine();
+           }
         }
     }
 }

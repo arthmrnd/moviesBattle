@@ -3,6 +3,7 @@ package br.com.letscode.moviesbattle.quizz;
 import br.com.letscode.moviesbattle.jogador.Jogador;
 import br.com.letscode.moviesbattle.movie.Movie;
 import br.com.letscode.moviesbattle.movie.MovieService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -10,17 +11,20 @@ import java.util.List;
 import java.util.Scanner;
 
 @Service
+@RequiredArgsConstructor
 public class QuizzService {
 
     private QuizzRepository repository;
     private MovieService movieService;
     private Quizz quizz;
 
-    public List<Movie> movies = this.movieService.escolherFilme();
+    public List<Movie> movies;
 
-    public QuizzService() throws IOException {
+
+    public QuizzService(QuizzRepository repository) throws IOException {
+        this.repository = repository;
+        movies = movieService.escolherFilme();
     }
-
 
     public void escolherFilme(Jogador jogador){
         quizz.setJogador(jogador);
@@ -45,7 +49,6 @@ public class QuizzService {
 
 
     public void jogar(Jogador jogador) throws IOException {
-        //Quizz quizz = new Quizz();
         do{
             escolherFilme(jogador
             );

@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,6 +23,24 @@ public class MovieService {
 
     public List<Movie> listarTodos() throws IOException {
         return movieRepository.listAll();
+    }
+
+    private Movie filmeAleatorio() throws IOException  {
+        var movies = listarTodos();
+        var random = new Random();
+        return movies.get(random.nextInt(movies.size()));
+    }
+
+    public List<Movie> escolherFilme() throws IOException {
+        List<Movie> list = new ArrayList<>();
+        var primeiroFilme = filmeAleatorio();
+        list.add(primeiroFilme);
+        Movie segundoFilme;
+        do {
+            segundoFilme = filmeAleatorio();
+        } while (primeiroFilme.equals(segundoFilme));
+        list.add(segundoFilme);
+        return list;
     }
 
     public List<Movie> salvarFilmes(List<String> name) throws IOException {
