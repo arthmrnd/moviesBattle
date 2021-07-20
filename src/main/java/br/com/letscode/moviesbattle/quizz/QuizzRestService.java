@@ -1,18 +1,17 @@
 package br.com.letscode.moviesbattle.quizz;
 
-import br.com.letscode.moviesbattle.jogador.Jogador;
 import br.com.letscode.moviesbattle.jogador.JogadorRestService;
 import br.com.letscode.moviesbattle.movie.Movie;
 import br.com.letscode.moviesbattle.movie.MovieService;
 import br.com.letscode.moviesbattle.quizz.jogadorquizz.JogadorQuizz;
 import br.com.letscode.moviesbattle.quizz.jogadorquizz.JogadorQuizzRepository;
+import br.com.letscode.moviesbattle.ranking.RankingRestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
-import java.util.Scanner;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +23,7 @@ public class QuizzRestService {
     private final JogadorRestService jogadorRestService;
     private final JogadorQuizzRepository jogadorQuizzRepository;
     private final QuizzRestRepository quizzRestRepository;
+    private final RankingRestRepository rankingRestRepository;
 
     public List<Movie> listMovies() throws IOException {
         movieList = movieService.escolherFilme();
@@ -42,8 +42,8 @@ public class QuizzRestService {
             jogadorQuizzList.add(score(quizz, jogadorQuizz));
             jogadorQuizzRepository.inserirArquivo(jogadorQuizzList);
             if (jogadorQuizz.getVida() == 0) {
-                //TODO fazer a gravacão no arquivo ranking
-                throw new AcabouJogoException(jogadorQuizzList);
+                quizzRestRepository.gravarPontuacao(jogadorQuizzList);
+                throw new AcabouJogoException(rankingRestRepository.sort());
             }
             return resposta;
         }

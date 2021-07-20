@@ -23,10 +23,4 @@ public class JogadorQuizz implements Comparable<JogadorQuizz> {
     public int compareTo(JogadorQuizz jogadorQuizz) {
         return this.getNome().compareToIgnoreCase(jogadorQuizz.getNome());
     }
-
-    @Override
-    public String toString() {
-        return "Nome :" + nome +
-                ", score: " + score + "\n";
-    }
 }

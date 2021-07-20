@@ -1,6 +1,5 @@
 package br.com.letscode.moviesbattle.quizz;
 
-import br.com.letscode.moviesbattle.jogador.Jogador;
 import br.com.letscode.moviesbattle.movie.Movie;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
