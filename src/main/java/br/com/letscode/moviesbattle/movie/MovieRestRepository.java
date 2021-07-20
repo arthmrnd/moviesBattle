@@ -2,6 +2,7 @@ package br.com.letscode.moviesbattle.movie;
 
 import br.com.letscode.moviesbattle.client.MovieDetail;
 import br.com.letscode.moviesbattle.client.MovieMinimal;
+import br.com.letscode.moviesbattle.jogador.Jogador;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -58,7 +59,7 @@ public class MovieRestRepository {
     }
 
     private String format(Movie movie) {
-        return String.format("%s,%s,%s,%f\r\n",
+        return String.format("%s;%s;%s;%f\r\n",
                 movie.getTitle(),
                 movie.getYear(),
                 movie.getImdbId(),
@@ -66,7 +67,7 @@ public class MovieRestRepository {
     }
 
     private Movie convert(String linha) {
-        StringTokenizer token = new StringTokenizer(linha, ",");
+        StringTokenizer token = new StringTokenizer(linha, ";");
         return Movie.builder()
                 .title(token.nextToken())
                 .year(Integer.valueOf(token.nextToken()))

@@ -4,6 +4,7 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -18,6 +19,7 @@ public class JogadorRestRepository {
     List<Jogador> jogadoresList;
     private final String path = "src/main/resources/dados/jogadores.csv";
 
+    @PostConstruct
     public void loadJogadoresList() throws IOException {
         jogadoresList = new ArrayList<>();
         CSVReader reader = new CSVReader(new FileReader(path));
@@ -28,16 +30,6 @@ public class JogadorRestRepository {
             jogador.setPassword(line[1]);
             this.jogadoresList.add(jogador);
         }
-    }
-
-    public Boolean compareJogador(String user, String password) throws NoSuchAlgorithmException {
-        String passwordHex = getSHA1Hex(password);
-        for (Jogador jogador : jogadoresList) {
-            if (user.equals(jogador.getUser())){
-                return passwordHex.equals(jogador.getPassword());
-            }
-        }
-        return false;
     }
 
     public Boolean createJogador(Jogador jogador) throws IOException, NoSuchAlgorithmException {
@@ -51,7 +43,7 @@ public class JogadorRestRepository {
         return true;
     }
 
-    private String getSHA1Hex(String string) throws NoSuchAlgorithmException {
+    String getSHA1Hex(String string) throws NoSuchAlgorithmException {
         MessageDigest algorithm = MessageDigest.getInstance("SHA-1");
         byte[] passwordHash = algorithm.digest(string.getBytes(StandardCharsets.UTF_8));
         var stringHex = new StringBuilder();
