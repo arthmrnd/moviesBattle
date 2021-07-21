@@ -6,6 +6,7 @@ import br.com.letscode.moviesbattle.movie.MovieRestService;
 import br.com.letscode.moviesbattle.quizz.jogadorquizz.JogadorQuizz;
 import br.com.letscode.moviesbattle.quizz.jogadorquizz.JogadorQuizzRepository;
 import br.com.letscode.moviesbattle.ranking.RankingRestRepository;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
+@Data
 @Service
 @RequiredArgsConstructor
 public class QuizzRestService {

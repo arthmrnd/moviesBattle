@@ -1,6 +1,9 @@
 package br.com.letscode.moviesbattle.quizz;
 
+import br.com.letscode.moviesbattle.jogador.Jogador;
+import br.com.letscode.moviesbattle.movie.Movie;
 import br.com.letscode.moviesbattle.movie.MovieRestService;
+import br.com.letscode.moviesbattle.ranking.RankingRestRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +11,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -24,6 +30,12 @@ public class QuizzRestControllerTest {
     private MovieRestService movieRestService;
 
     @Autowired
+    private QuizzRestService quizzRestService;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @Autowired
     private MockMvc mockMvc;
 
     @Test
@@ -33,5 +45,65 @@ public class QuizzRestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString(String.valueOf(movieRestService.getDuplaFilmes().get(0).getTitle()))))
                 .andExpect(content().string(containsString(String.valueOf(movieRestService.getDuplaFilmes().get(1).getTitle()))));
+    }
+
+    @Test
+    void jogadaTestTrue() throws Exception {
+        Jogador jogador = new Jogador("Thiago", "12345");
+        Quizz quizz = Quizz.builder().jogador(jogador).imdbId("tt0848228").build();
+        List<Movie> movieList = new ArrayList<>();
+        movieList.add(Movie.builder().title("Batman v Superman: Dawn of Justice").year(2016).imdbId("tt2975590").rating(6.4).build());
+        movieList.add(Movie.builder().title("The Avengers").year(2012).imdbId("tt0848228").rating(8.0).build());
+        quizzRestService.setMovieList(movieList);
+        this.mockMvc.perform(post("/quizz")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(quizz)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString(String.valueOf(true))));
+    }
+
+    @Test
+    void jogadaTestFalse() throws Exception {
+        Jogador jogador = new Jogador("Thiago", "12345");
+        Quizz quizz = Quizz.builder().jogador(jogador).imdbId("tt2975590").build();
+        List<Movie> movieList = new ArrayList<>();
+        movieList.add(Movie.builder().title("Batman v Superman: Dawn of Justice").year(2016).imdbId("tt2975590").rating(6.4).build());
+        movieList.add(Movie.builder().title("The Avengers").year(2012).imdbId("tt0848228").rating(8.0).build());
+        quizzRestService.setMovieList(movieList);
+        this.mockMvc.perform(post("/quizz")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(quizz)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString(String.valueOf(false))));
+    }
+
+    @Test
+    void jogadaTestImdbIdErrado() throws Exception {
+        Jogador jogador = new Jogador("Thiago", "12345");
+        Quizz quizz = Quizz.builder().jogador(jogador).imdbId("tt458961").build();
+        List<Movie> movieList = new ArrayList<>();
+        movieList.add(Movie.builder().title("Batman v Superman: Dawn of Justice").year(2016).imdbId("tt2975590").rating(6.4).build());
+        movieList.add(Movie.builder().title("The Avengers").year(2012).imdbId("tt0848228").rating(8.0).build());
+        quizzRestService.setMovieList(movieList);
+        this.mockMvc.perform(post("/quizz")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(quizz)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString(String.valueOf(false))));
+    }
+
+    @Test
+    void jogadaTestJogadorInexistente() throws Exception {
+        Jogador jogador = new Jogador("Mariazinha", "12345");
+        Quizz quizz = Quizz.builder().jogador(jogador).imdbId("tt2975590").build();
+        this.mockMvc.perform(post("/quizz")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(quizz)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Informe um jogador e/ou senha corretas")));
     }
 }
