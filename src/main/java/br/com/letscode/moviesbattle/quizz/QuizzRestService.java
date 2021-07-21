@@ -36,8 +36,7 @@ public class QuizzRestService {
                     .nome(quizz.getJogador().getUser())
                     .build();
             List<JogadorQuizz> jogadorQuizzList = formatarJogador(jogadorQuizz);
-            List<Movie> moviesRatingList = listMovies();
-            Boolean resposta = comparacao(quizz.getImdbId(), moviesRatingList);
+            Boolean resposta = comparacao(quizz.getImdbId(), movieList);
             quizz.setResposta(resposta);
             jogadorQuizzList.add(score(quizz, jogadorQuizz));
             jogadorQuizzRepository.inserirArquivo(jogadorQuizzList);
